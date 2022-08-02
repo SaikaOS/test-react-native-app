@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import MyInput from "../components/MyInput";
 import { useDispatch, useSelector } from "react-redux";
-import { setLogin, setPassword } from "../store/authSlice";
+import { loggedIn, loggedOut, setLogin, setPassword } from "../store/authSlice";
 import Header from "../components/Header";
 
 export const LOGIN = "Sayan";
@@ -15,11 +15,17 @@ const AuthPage = ({navigation}) => {
     if (state.login !== LOGIN || state.password !== PASSWORD) {
       alert('Incorrect login or password. Please try again');
     } else {
+      dispatch(loggedIn())
       navigation.navigate('Main')
     }
   };
+  useEffect(() => {
+    dispatch(loggedOut())
+  }, [])
   return (
-    <View style={styles.wrapper}>
+    <View>
+        <Header />
+        <View style={styles.wrapper}>
       <Text style={styles.title}>Autorization</Text>
       <View style={styles.block}>
         <Text style={styles.text}>login</Text>
@@ -38,6 +44,8 @@ const AuthPage = ({navigation}) => {
         />
       </View>
     </View>
+    </View>
+   
   );
 };
 
