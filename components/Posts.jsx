@@ -15,15 +15,26 @@ const Posts = () => {
   const getRandomNum = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
-  useEffect(() => {
-    setRefreshing(true);
+  const fetchAll = () => {
     dispatch(fetchPosts(getRandomNum(5, 10)));
     dispatch(fetchUsers());
-    setRefreshing(false);
-  }, []);
+  }
+    useEffect(() => {
+      fetchAll()
+    }, []);
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+      fetchAll()
+    }, 2000);
+  };
   return (
     <View style={styles.post}>
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         data={posts.posts}
         showsVerticalScrollIndicator={false}
         renderItem={({ index }) => (
